@@ -1,11 +1,14 @@
 require_relative 'store'
 
 def main
+  cart = Store::Cart.new
+  cart.process
+  discount = Store::Discount.new(cart.item_list)
+  discount.calculate_discount
+  invoice = Store::Invoice.new(cart.item_list, discount, '$')
+  invoice.print_invoice
   begin
-    bill1 = Store::Checkout.new(Store::Cart.new.process, '$')
-    bill1.calculate_discount
-    bill1.print_invoice
-  rescue => e
+rescue => e
     puts "Error: #{e}"
   end
 end
